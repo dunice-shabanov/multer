@@ -115,9 +115,9 @@ module.exports = function(options) {
         }
 
         fileStream.on('data', function(data) {
-          if (data) { 
+          if (data) {
             if (options.inMemory) bufs.push(data);
-            file.size += data.length; 
+            file.size += data.length;
           }
           // trigger "file data" event
           if (options.onFileUploadData) { options.onFileUploadData(file, data); }
@@ -144,7 +144,7 @@ module.exports = function(options) {
 
         fileStream.on('error', function(error) {
           // trigger "file error" event
-          if (options.onError) { options.onError(error, next); }
+          if (options.onError) { options.onError(error, next, file); }
           else next(error);
         });
 
@@ -154,13 +154,13 @@ module.exports = function(options) {
 
         function onFileStreamError(error) {
           // trigger "file error" event
-          if (options.onError) { options.onError(error, next); }
+          if (options.onError) { options.onError(error, next, file); }
           else next(error);
         }
 
         if (options.inMemory)
           fileStream.on('error', onFileStreamError );
-        else 
+        else
           ws.on('error', onFileStreamError );
 
       });
